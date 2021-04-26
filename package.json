@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "test": "mocha src/**/**.spec.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha src/**/**.spec.js",
     "int-test": "mocha --require babel-core/register --recursive test"
   },
   "repository": {
