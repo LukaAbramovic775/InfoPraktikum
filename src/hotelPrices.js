@@ -1,13 +1,17 @@
-let pricelist = [
-    {from: "2020-01-01", to: "2020-02-01", price: 34.5},
-    {from: "2020-02-02", to: "2020-03-01", price: 37.0},
-    {from: "2020-03-02", to: "2020-05-15", price: 39.0},
-    {from: "2020-05-16", to: "2020-06-15", price: 37.0},
-];
-
 function priceListFormatter(pricelist) {
-
+    grouped = pricelist.reduce(function (acc, val) {
+        acc[val.price] = acc[val.price] || [];
+        acc[val.price].push(val);
+        return acc;
+    }, {});
+    return printOutput(grouped);
 }
 
-
+function printOutput(format) {
+  res = ""; 
+  for (let price of Object.keys(format).sort()){
+    res += `${parseFloat(price).toFixed(1)} : ${format[price].map(x => x.from + ' do ' + x.to).join(' , ')} \n`;
+  }
+  return res;
+}
 module.exports = priceListFormatter;
