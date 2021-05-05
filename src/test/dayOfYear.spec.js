@@ -5,7 +5,7 @@ var should = chai.should;
 const dayOfYear = require("../dayOfYear").dayOfYear;
 
 
-describe("Day of year", function () {
+describe.skip("Day of year", function () {
     it("dayOfYear should be a function", function () {
       dayOfYear(1);
     });
