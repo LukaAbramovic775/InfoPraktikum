@@ -1,34 +1,78 @@
-var assert = require("assert");
-var chai = require("chai");
-var expect = chai.expect;
-var should = chai.should;
-const trigramGenerator = require("../trigramGenerator");
+const { assert, expect } = require("chai");
+const { trigramGenerator, generateChunks } = require("../trigramGenerator");
 
-
-describe("trigram generator problem", function () {
+describe("trigramGenerator problem TDD", function () {
+  context("trigramGenerator", function () {
     it("trigramGenerator should be a function", function () {
-      trigramGenerator("");
-    });
-    it("function should throw error if argument is not a text", function (){
-      expect(()=> trigramGenerator(1)).to.throw(Error);
-    });
-    it('should throw error if argument is not a string', function () {
-      expect(() => trigramGenerator(5)).to.throw();
-      expect(() => trigramGenerator([])).to.throw();
-      expect(() => trigramGenerator({})).to.throw();
+      expect(trigramGenerator).to.be.a("function");
     });
 
-  it('should return an object', function () {
-    // expect(trigramGenerator('')).to.be.an('object');
-    expect(typeof trigramGenerator('')).to.equal('object');
+    it("trigramGenerator should throw error if argument is not string", function () {
+      expect(() => trigramGenerator(1)).to.throw();
+    });
+
+    it("trigramGenerator should return correct trigram for less than 3 words", function () {
+      expect(trigramGenerator("I wish")).to.eql(new Map());
+    });
+
+    it("trigramGenerator should return correct trigram for 3 words input", function () {
+      expect(trigramGenerator("I wish I")).to.eql(new Map([["I wish", ["I"]]]));
+    });
+
+    it("trigramGenerator should return correct trigram for 4 words input", function () {
+      expect(trigramGenerator("I wish I may")).to.eql(
+        new Map([
+          ["I wish", ["I"]],
+          ["wish I", ["may"]],
+        ])
+      );
+    });
+
+    it("trigramGenerator should return correct trigram for 5 words input", function () {
+      expect(trigramGenerator("I wish I may I")).to.eql(
+        new Map([
+          ["I wish", ["I"]],
+          ["wish I", ["may"]],
+          ["I may", ["I"]],
+        ])
+      );
+    });
+
+    it("trigramGenerator should return correct trigram for 6 words input", function () {
+      expect(trigramGenerator("I wish I may I wish")).to.eql(
+        new Map([
+          ["I wish", ["I"]],
+          ["wish I", ["may"]],
+          ["I may", ["I"]],
+          ["may I", ["wish"]],
+        ])
+      );
+    });
+
+    it("trigramGenerator should return correct trigram for 7 words input", function () {
+      expect(trigramGenerator("I wish I may I wish I")).to.eql(
+        new Map([
+          ["I wish", ["I", "I"]],
+          ["wish I", ["may"]],
+          ["I may", ["I"]],
+          ["may I", ["wish"]],
+        ])
+      );
+    });
   });
 
-  it(`should return correct trigram for 2 words input`, function () {
-    expect(trigramGenerator('I wish')).to.eql(new Map());
-  });
-
-  it(`should return correct trigram for 3 words input`, function () {
-    console.log(trigramGenerator('I wish I'));
-    expect(trigramGenerator('I wish I')).to.eql(new Map([['I wish', ['I']]]));
+  context("generateChunks", function () {
+    it("generateChunks should return correct array for less than 3 words input", function () {
+      expect(generateChunks(["I", "wish"])).to.eql([]);
+    });
+    it("generateChunks should return correct array for 3 words input", function () {
+      expect(generateChunks(["I", "wish", "I"])).to.eql([["I", "wish", "I"]]);
+    });
+    it("generateChunks should return correct array for 4 words input", function () {
+      expect(generateChunks(["I", "wish", "I", "may"])).to.eql([
+        ["I", "wish", "I"],
+        ["wish", "I", "may"],
+      ]);
+    });
   });
 });
